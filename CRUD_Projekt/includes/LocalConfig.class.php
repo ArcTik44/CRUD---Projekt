@@ -1,8 +1,8 @@
 <?php
 class LocalConfig
 {
-    public const DBSERVER = "127.0.0.1";
-    public const DBUSER = "c82sqladmin";
-    public const DBDATABASE = "c82seznam";
-    public const DBPASSWORD = "nevimkamo123";
+    public const DBSERVER = "[ip adresa serveru]";
+    public const DBUSER = "[název uživatele k databázi]";
+    public const DBDATABASE = "[název databáze]";
+    public const DBPASSWORD = "[heslo k databázi]";
 }
