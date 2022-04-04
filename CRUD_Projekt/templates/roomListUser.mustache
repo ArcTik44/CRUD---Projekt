@@ -1,0 +1,21 @@
+<h1>Výpis místností</h1>
+<a href = "User.php" class="btn btn-primary mt-3">Zpět na účet</a>
+<table class="table table-striped roomList">
+    <thead>
+    <tr>
+        <th>Název</th>
+        <th>Číslo</th>
+        <th>Tel.</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{# rooms }}
+        <tr>
+            <td><a href="roomUser.php?room_id={{ room_id }}">{{ name }}</a></td>
+            <td>{{ no }}</td>
+            <td>{{phone}}</td>
+        </tr>
+    {{/ rooms }}
+    </tbody>
+</table>
+

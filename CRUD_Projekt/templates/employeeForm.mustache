@@ -1,0 +1,52 @@
+{{#create}}<h1>Nový zaměstnanec</h1>{{/create}}
+{{#update}}<h1>Upravit zaměstnance</h1>{{/update}}
+
+<form method="post">
+    {{#employee}}
+    <div class="mb-3">
+        <label for="name">Jméno</label>
+        <input type="text" name="name" id="name" value="{{name}}" required class="form-control">
+    </div>
+    <div class="mb-3">
+        <label for="surname">Příjmení</label>
+        <input type="text" name="surname" id="surname" value="{{surname}}" required class="form-control">
+    </div>
+    <div class="mb-3">
+        <label for="job">Pozice</label>
+        <input type="text" name="job" id="job" value="{{job}}" required class="form-control">
+    </div>
+    <div class="mb-3">
+        <label for="login">Login:</label>
+        <input type="text" name="login" id="login" value="{{login}}" class="form-control">
+    </div>
+    <div class="mb-3">
+        <label for="pass">Heslo:</label>
+        <input type="text" name="pass" id="pass" value="{{pass}}" class="form-control">
+    </div>
+    <div class="mb-3">
+        <label for="admin">Admin privilegia:</label>
+        <input type="checkbox" name="admin" id="admin" value="{{admin}}" class="form-control">
+    </div>
+    
+    <div class="mb-3">
+        <label>Místnost: </label>
+        {{#rooms}}
+        <input type="radio" name="room" id="room" value="{{room}}" class="form-control">
+        <label for="room">{{RName}}</label>
+        {{/rooms}}
+    </div>
+
+    <div class="mb-3">
+        {{#create}}
+        <input type="hidden" name="action" value="create">
+        <input type="submit" value="Vytvořit" class="btn btn-primary">
+        {{/create}}
+        {{^update}}
+            <input type="hidden" name="action" value="update">
+            <input type="hidden" name="employee_id" value="{{employee_id}}">
+            <input type="submit" value="Upravit" class="btn btn-primary">
+        {{/update}}
+    </div>
+    {{/employee}}
+</form>
+<a href = 'employeesAdmin.php' class="btn btn-primary mt-3">Seznam zaměstnanců</a>

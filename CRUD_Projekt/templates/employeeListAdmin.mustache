@@ -1,0 +1,30 @@
+<h1>Výpis zaměstnanců</h1>
+<a href="createEmployee.php" class="btn btn-primary mt-3">Nový zaměstnanec</a>
+<a href = "User.php" class="btn btn-primary mt-3">Zpět na účet</a>
+<table class="table table-striped roomList">
+    <thead>
+    <tr>
+        <th>Jméno</th>
+        <th>Pozice</th>
+        <th>Místnost</th>
+        <th>Akce</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{# employees }}
+        <tr>
+            <td><a href="{{employeeDetail}}?employee_id={{ employee_id }}">{{ name }} {{surname}}</a></td>
+            <td>{{ job }}</td>
+            <td>{{ RoomName }}</td>
+            <td>
+                <a href="updateEmployee.php?employee_id={{ employee_id }}" class="btn btn-primary">Změnit</a>
+                <form action="deleteEmployee.php" method="post" class="form-inline" onsubmit="return confirm('Skutečně smazat?\nAkce je nevratná!');">
+                    <input type="hidden" name="employee_id" value="{{ employee_id }}">
+                    <input type="submit" value="Smazat" class="btn btn-danger">
+                </form>
+            </td>
+        </tr>
+    {{/ employees }}
+    </tbody>
+</table>
+

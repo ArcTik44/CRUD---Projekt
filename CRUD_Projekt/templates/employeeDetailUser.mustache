@@ -1,0 +1,21 @@
+{{#employee}}
+<h2>Karta osoby: {{name}} {{surname}}</h2>
+<h4>Jméno:</h4>
+<p>{{name}}</p>
+<h4>Příjmení: </h4>
+<p>{{surname}}</p>
+<h4>Pozice: </h4>
+<p>{{job}}</p>
+<h4>Mzda: </h4>
+<p>{{wage}} Kč</p>
+<h4>Místnost: </h4>
+<a href = "roomUser.php?room_id={{room_id}}">{{RoomName}}</a>
+{{/employee}}
+<h4>Klíče:</h4>
+{{#keys}}
+<a href = 'roomUser.php?room_id={{RiD}}'>{{RName}}</a><br/>
+{{/keys}}
+
+<a href ='userEmployees.php'  class="btn btn-primary mt-3">Seznam zaměstnanců</a>
+
+

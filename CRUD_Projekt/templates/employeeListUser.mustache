@@ -1,0 +1,23 @@
+<h1>Výpis zaměstnanců</h1>
+<a href = "User.php" class="btn btn-primary mt-3">Zpět na účet</a>
+<table class="table table-striped roomList">
+    <thead>
+    <tr>
+        <th>Jméno</th>
+        <th>Pozice</th>
+        <th>Místnost</th>
+        <th>Telefon</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{# employees }}
+        <tr>
+            <td><a href="employeeUser.php?employee_id={{ employee_id }}">{{ name }} {{surname}}</a></td>
+            <td>{{ job }}</td>
+            <td>{{ RoomName }}</td>
+            <td>{{phone}}</td>
+        </tr>
+    {{/ employees }}
+    </tbody>
+</table>
+

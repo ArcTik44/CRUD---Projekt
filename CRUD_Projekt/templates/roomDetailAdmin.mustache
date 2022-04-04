@@ -1,0 +1,18 @@
+{{#room}}
+<h2>{{name}}</h2>
+<h4>Číslo:</h4>
+<p>{{no}}</p>
+<h4>Tel.:</h4>
+<p>{{phone}}</p>
+{{/room}}
+<h4>Průměrná mzda:</h4>
+<p>{{#AVG}} {{AvgWage}} {{/AVG}}</p>
+<h4>Klíče: </h4>
+{{#keys}}
+<a href='employeeAdmin.php?employee_id={{EmpId}}'>{{EmpName}} {{EmpSurname}}</a><br/>
+{{/keys}}
+<h4>Zaměstnanci:</h4>
+{{#employees}}
+<a href = 'employeeAdmin.php?employee_id={{EmId}}'>{{EmNa}} {{EmSu}}</a><br/>
+{{/employees}}
+<a href ='roomsAdmin.php' class="btn btn-primary mt-3">Seznam místností</a>
