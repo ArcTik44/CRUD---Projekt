@@ -9,12 +9,12 @@
     </div>
     <div class="mb-3">
         <label for="no">Číslo</label>
-        <input type="text" name="no" id="no" value="{{no}}" required class="form-control">
+        <input type="number" maxlength="4" name="no" id="no" value="{{no}}" required class="form-control">
         {{#errors.no}}<small class="text-warning">{{errors.no}}</small>{{/errors.no}}
     </div>
     <div class="mb-3">
         <label for="phone">Tel.</label>
-        <input type="text" name="phone" id="phone" value="{{phone}}" class="form-control">
+        <input type="number" maxlength="4" name="phone" id="phone" value="{{phone}}" class="form-control">
         {{#errors.phone}}<small class="text-warning">{{errors.phone}}</small>{{/errors.phone}}
     </div>
     <div class="mb-3">

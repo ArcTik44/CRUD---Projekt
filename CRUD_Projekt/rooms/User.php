@@ -3,7 +3,6 @@
 require "../includes/bootstrap.inc.php";
 class UserPage extends BaseDBPage
 {
-       
       public string $username;
       public string $password;
       public string $admin;

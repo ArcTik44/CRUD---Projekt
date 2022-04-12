@@ -20,7 +20,6 @@ final class CreateRoomPage extends BaseDBPage {
 
     protected function setUp(): void
     {
-        
         parent::setUp();
        
         $this->state = $this->getState();
@@ -63,11 +62,10 @@ final class CreateRoomPage extends BaseDBPage {
 
     protected function body(): string
     {
-        if(!$_SESSION)
-            {
-                  header('location:index.php',false);
-                  exit;
-            }
+        if (($_SESSION['admin']==0)||(!$_SESSION)) {
+            header('location:index.php', false);
+            exit;
+        }
         if ($this->state === self::STATE_FORM_REQUESTED) {
             return $this->m->render("roomForm", ['create' => true, 'room' => $this->room,'errors' => $this->room->getValidationErrors()]);
         } elseif ($this->state === self::STATE_PROCESSED) {

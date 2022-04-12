@@ -13,11 +13,10 @@ final class EmployeeDetailAdmin extends BaseDBPage
     }
     protected function body(): string
     {
-        if(!$_SESSION)
-            {
-                  header('location:index.php',false);
-                  exit;
-            }
+        if (($_SESSION['admin']==0)||(!$_SESSION)) {
+            header('location:index.php', false);
+            exit;
+        }
         if (!$this->employee_id) {
             http_response_code(400);
             die("Error 400: Bad request");

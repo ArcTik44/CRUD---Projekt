@@ -1,0 +1,21 @@
+<h1>Přiřadit klíč ke zaměstnanci</h1>
+<form method='post'>
+<label>Zaměstnanec: </label>
+<select name="employee" class="form-select" aria-label="Default select example">
+    {{#Employees}}
+    <option value={{employeeId}}>{{employeeName}} {{employeeSurname}}</option>
+    {{/Employees}}
+</select>
+<label>Místnost: </label>
+<select name="room" class="form-select" aria-label="Default select example">
+    {{#Rooms}}
+    <option value={{roomId}}>{{roomName}}</option>
+    {{/Rooms}}
+</select>
+<input type="hidden" name="action" value="create">
+{{#Employees}}
+<input type="hidden" name="employee_id" value="{{employeeId}}">
+{{/Employees}}
+<input type='submit' value='Přiřadit' class="btn btn-success mt-3" > 
+</form>
+<a href="keysManage.php" class="btn btn-danger mt-3">Zpět</a>

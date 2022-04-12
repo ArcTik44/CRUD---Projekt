@@ -8,8 +8,9 @@ final class EmployeeModel{
     public string $wage;
     public ?string $login;
     public ?string $pass;
-    public bool $admin;
-    
+    public ?int $admin;
+    public ?string $passHash;
+
     private array $validationErrors = [];
     public function getValidationErrors(): array
     {
@@ -31,7 +32,12 @@ public function __construct(array $employeeData=[])
     $this->room=filter_input(INPUT_POST,'room') ?? '';
     $this->login=filter_input(INPUT_POST,'login') ?? null;
     $this->pass=filter_input(INPUT_POST,'pass')??null;
-    $this->admin=filter_input(INPUT_POST,'admin',FILTER_VALIDATE_BOOLEAN)??false;
+    $this->admin=filter_input(INPUT_POST,'admin',FILTER_VALIDATE_INT);
+    if(isset($this->admin)){
+        $this->admin = 1;
+    }
+    else $this->admin = 0;
+    $this->passHash = password_hash($this->pass,PASSWORD_DEFAULT)??null;
 }
 
     public function Validate():bool{
@@ -39,10 +45,6 @@ public function __construct(array $employeeData=[])
         if(!$this->name){
             $isOk = false;
             $this->validationErrors['name'] = "Name cannot be empty";
-        }
-        if(!$this->employee_id){
-            $isOk = false;
-            $this->validationErrors['employee_id'] = "Id cannot be empty";
         }
         if(!$this->surname){
             $isOk = false;
@@ -58,7 +60,7 @@ public function __construct(array $employeeData=[])
         }
         if(!$this->admin)
         {
-            $this->admin = false;
+            $this->admin = 0;
         }
         if(!$this->pass){
             $this->pass = null;
@@ -70,17 +72,16 @@ public function __construct(array $employeeData=[])
     }
 
     public function Insert():bool{
-        $query = "INSERT INTO employee (name,surname, room,job,wage,login,pass,admin) VALUES (:name,:surname,:room,:job,:wage,:login,:pass,:admin)";
-        
-
+        $query = 'INSERT INTO employee (name,surname, room,job,wage,login,password,admin) VALUES (:name,:surname,:room,:job,:wage,:login,:pass,:admin)';
         $stmt = DB::getConnection()->prepare($query);
+        
         
         $stmt->bindParam(':name', $this->name);
         $stmt->bindParam(':surname', $this->surname);
         $stmt->bindParam(':room', $this->room);
         $stmt->bindParam(':job', $this->job);
         $stmt->bindParam(':wage',$this->wage);
-        $stmt->bindParam(':pass',password_hash($this->pass,PASSWORD_DEFAULT));
+        $stmt->bindParam(':pass',$this->passHash);
         $stmt->bindParam(':login',$this->login);
         $stmt->bindParam(':admin',$this->admin);
 
@@ -93,14 +94,15 @@ public function __construct(array $employeeData=[])
     }
 
     public function Update():bool{
-        $query = "UPDATE employee SET name=:name, surname=:surname, job=:job,room=:room,login=:login,pass=:pass,wage=:wage,admin=:admin WHERE employee_id=:emp_id";
+        $query = "UPDATE employee SET name=:name, surname=:surname, job=:job,room=:room,login=:login,password=:pass,wage=:wage,admin=:admin WHERE employee_id=:emp_id";
+
 
         $stmt = DB::getConnection()->prepare($query);
         $stmt->bindParam(':name', $this->name);
         $stmt->bindParam(':surname', $this->surname);
         $stmt->bindParam(':wage',$this->wage);
         $stmt->bindParam(':room',$this->room);
-        $stmt->bindParam(':pass',$this->pass);
+        $stmt->bindParam(':pass',$this->passHash);
         $stmt->bindParam(':emp_id',$this->employee_id);
         $stmt->bindParam(':job', $this->job);
         $stmt->bindParam(':login',$this->login);
@@ -133,3 +135,4 @@ public function __construct(array $employeeData=[])
         return new self($_POST);
     }
 }
+?>

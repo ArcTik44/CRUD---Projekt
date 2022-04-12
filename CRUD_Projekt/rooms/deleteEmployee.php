@@ -16,14 +16,15 @@ final class DeleteEmployeePage extends BaseDBPage {
     protected function setUp(): void
     {
         parent::setUp();
-        session_start();
+        
+        
 
         $this->state = $this->getState();
 
         if ($this->state === self::STATE_PROCESSED) {
             //je hotovo, reportujeme
             if ($this->result === self::RESULT_SUCCESS) {
-                $this->extraHeaders[] = "<meta http-equiv='refresh' content='5;url=./'>";
+                $this->extraHeaders[] = "<meta http-equiv='refresh' content='5;url=employeesAdmin.php'>";
                 $this->title = "Zaměstnanec smazán";
             } elseif ($this->result === self::RESULT_FAIL) {
                 $this->title = "Smazání zaměstnance selhalo";
@@ -35,11 +36,21 @@ final class DeleteEmployeePage extends BaseDBPage {
             if (!$this->employee_id) {
                 throw new RequestException(400);
             }
-
             //smazat a přesměrovat
             $token = random_bytes(20);
 
-            if ($this->delete($this->employee_id)) {
+            $stmt2 = $this->pdo->prepare('SELECT room.name AS RName, room.room_id AS RiD FROM 
+                ((room INNER JOIN `key` ON room.room_id=`key`.room) 
+                INNER JOIN employee ON employee.employee_id = `key`.employee) WHERE `key`.employee =:emp_id');
+        $stmt2->bindParam(":emp_id",$this->employee_id);
+        $stmt2->execute([$this->employee_id]);
+
+        if($stmt2->rowCount()>0)
+        {
+            $_SESSION[$token] = ['result'=>self::RESULT_FAIL];
+        }
+        else
+            if ($this->Delete($this->employee_id)) {
                 //přesměruj se zprávou "úspěch"
                 $_SESSION[$token] = ['result' => self::RESULT_SUCCESS];
 //                $this->redirect(self::RESULT_SUCCESS);
@@ -54,13 +65,12 @@ final class DeleteEmployeePage extends BaseDBPage {
 
     protected function body(): string
     {
-        if(!$_SESSION)
-            {
-                  header('location:index.php',false);
-                  exit;
-            }
+        if (($_SESSION['admin']==0)||(!$_SESSION)) {
+            header('location:index.php', false);
+            exit;
+        }
         if ($this->result === self::RESULT_SUCCESS) {
-            return $this->m->render("employeeSuccess", ["message" => "Zaměstnanec byl úspěšně smazána."]);
+            return $this->m->render("employeeSuccess", ["message" => "Zaměstnanec byl úspěšně smazán."]);
         } elseif ($this->result === self::RESULT_FAIL) {
             return $this->m->render("employeeFail", ["message" => "Smazání zaměstnance selhalo."]);
         }
@@ -85,7 +95,7 @@ final class DeleteEmployeePage extends BaseDBPage {
                 $this->result = self::RESULT_FAIL;
                 return self::STATE_PROCESSED;
             }
-
+            
             throw new RequestException(400);
         }
 
@@ -117,4 +127,3 @@ final class DeleteEmployeePage extends BaseDBPage {
 
 $page = new DeleteEmployeePage();
 $page->render();
-

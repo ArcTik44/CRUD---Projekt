@@ -39,26 +39,35 @@ final class DeleteRoomPage extends BaseDBPage {
             //smazat a přesměrovat
             $token = random_bytes(20);
 
-            if ($this->delete($this->room_id)) {
+            $stmtKeys = $this->pdo->prepare('SELECT employee.employee_id AS EmpId, employee.name AS EmpName,employee.surname AS EmpSurname FROM `key` 
+            LEFT JOIN employee ON `key`.employee=employee.employee_id WHERE `key`.room=:roomId');
+            $stmtKeys->bindParam(":roomId",$this->room_id);
+            $stmtKeys->execute([$this->room_id]);
+
+            if($stmtKeys->rowCount()>0){
+                $_SESSION[$token] = ['result'=>self::RESULT_FAIL];
+            }
+            else
+                if ($this->delete($this->room_id)) {
                 //přesměruj se zprávou "úspěch"
                 $_SESSION[$token] = ['result' => self::RESULT_SUCCESS];
-//                $this->redirect(self::RESULT_SUCCESS);
-            } else {
+                //$this->redirect(self::RESULT_SUCCESS);
+                } else {
                 //přesměruj se zprávou "neúspěch"
                 $_SESSION[$token] = ['result' => self::RESULT_FAIL];
-//                $this->redirect(self::RESULT_FAIL);
-            }
-            $this->redirect($token);
+                //this->redirect(self::RESULT_FAIL);
+                }
+                $this->redirect($token);
         }
     }
 
     protected function body(): string
     {
-        if(!$_SESSION)
-            {
-                  header('location:index.php',false);
-                  exit;
-            }
+        if (($_SESSION['admin']==0)||(!$_SESSION)) {
+            header('location:index.php', false);
+            exit;
+        }
+        
         if ($this->result === self::RESULT_SUCCESS) {
             return $this->m->render("roomSuccess", ["message" => "Místnost byla úspěšně smazána."]);
         } elseif ($this->result === self::RESULT_FAIL) {

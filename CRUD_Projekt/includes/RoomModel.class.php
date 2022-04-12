@@ -20,8 +20,8 @@ final class RoomModel
         }
         $this->room_id = $id;
         $this->name = filter_input(INPUT_POST, 'name')??'';
-        $this->no = filter_input(INPUT_POST,'no')??'';
-        $this->phone = filter_input(INPUT_POST, 'phone') ?? null;
+        $this->no = filter_input(INPUT_POST,'no',FILTER_VALIDATE_INT)??'';
+        $this->phone = filter_input(INPUT_POST,'phone',FILTER_VALIDATE_INT) ?? null;
     }
 
     public function Validate():bool

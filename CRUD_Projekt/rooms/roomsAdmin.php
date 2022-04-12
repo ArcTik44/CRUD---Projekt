@@ -5,11 +5,10 @@ final class CurrentPage extends BaseDBPage {
 
     protected function body(): string
     {
-        if(!$_SESSION)
-            {
-                  header('location:index.php',false);
-                  exit;
-            }
+        if (($_SESSION['admin']==0)||(!$_SESSION)) {
+            header('location:index.php', false);
+            exit;
+        }
         $stmt = $this->pdo->prepare("SELECT * FROM `room` ORDER BY room_id");
         $stmt->execute([]);
 
