@@ -39,14 +39,20 @@ final class DeleteRoomPage extends BaseDBPage {
             //smazat a přesměrovat
             $token = random_bytes(20);
 
-            $stmtKeys = $this->pdo->prepare('SELECT employee.employee_id AS EmpId, employee.name AS EmpName,employee.surname AS EmpSurname FROM `key` 
-            LEFT JOIN employee ON `key`.employee=employee.employee_id WHERE `key`.room=:roomId');
-            $stmtKeys->bindParam(":roomId",$this->room_id);
-            $stmtKeys->execute([$this->room_id]);
+            $stmt = $this->pdo->prepare('SELECT employee_id FROM employee WHERE room=:roomId');
+            $stmt2 = $this->pdo->prepare('SELECT room.name, room.room_id FROM 
+                ((room INNER JOIN `key` ON room.room_id=`key`.room) 
+                INNER JOIN employee ON employee.employee_id = `key`.employee) WHERE `key`.room =:roomId');
 
-            if($stmtKeys->rowCount()>0){
+            $stmt->bindParam(":roomId",$this->room_id);
+            $stmt2->bindParam(":roomId",$this->room_id);
+            $stmt->execute([$this->room_id]);
+            $stmt2->execute([$this->room_id]);
+            
+            if(($stmt2->rowCount()>0)||($stmt->rowCount()>0)){
                 $_SESSION[$token] = ['result'=>self::RESULT_FAIL];
             }
+
             else
                 if ($this->delete($this->room_id)) {
                 //přesměruj se zprávou "úspěch"
@@ -108,7 +114,6 @@ final class DeleteRoomPage extends BaseDBPage {
 
     private function delete(int $room_id) {
         $query = "DELETE FROM room WHERE room_id = :room_id";
-
         $stmt = $this->pdo->prepare($query);
         $stmt->bindParam(':room_id', $room_id);
 
